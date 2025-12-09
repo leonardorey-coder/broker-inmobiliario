@@ -5,6 +5,17 @@ import {
   Home, TrendingUp, DollarSign, Award, Map, MessageCircle,
   ChevronDown
 } from 'lucide-react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+// Configurar iconos de Leaflet
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
 
 /* --- UTILITIES --- */
 
@@ -173,6 +184,16 @@ const SERVICIOS = [
 
 const ZONAS = [
   "Zona Hotelera", "Puerto Cancún", "Huayacán", "Lagos del Sol", "Zona Sur", "Centro"
+];
+
+// Datos de zonas con coordenadas para el mapa
+const ZONAS_MAPA = [
+  { nombre: "Zona Hotelera", lat: 21.0631, lng: -87.0694, desc: "Zona Hotelera - Lujo y turismo" },
+  { nombre: "Puerto Cancún", lat: 21.1289, lng: -87.0831, desc: "Puerto Cancún - Marina privada" },
+  { nombre: "Huayacán", lat: 20.9982, lng: -87.2682, desc: "Huayacán - Residencial premium" },
+  { nombre: "Lagos del Sol", lat: 21.0453, lng: -87.2734, desc: "Lagos del Sol - Inversión" },
+  { nombre: "Zona Sur", lat: 20.8823, lng: -87.0825, desc: "Zona Sur - Privada y segura" },
+  { nombre: "Centro", lat: 20.9324, lng: -87.3262, desc: "Centro - Comercial y ejecutivo" }
 ];
 
 /* --- COMPONENTES --- */
@@ -581,6 +602,8 @@ const Testimonials = () => {
 };
 
 const Areas = () => {
+  const [selectedZona, setSelectedZona] = useState(null);
+
   return (
     <section className="py-16 md:py-24 bg-gray-50">
       <div className="container mx-auto px-4 md:px-6 text-center">
@@ -594,7 +617,15 @@ const Areas = () => {
         <RevealOnScroll delay={200}>
           <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-10 md:mb-16">
             {ZONAS.map((zona, idx) => (
-              <button key={idx} className="px-4 py-2 md:px-8 md:py-3 bg-white border border-gray-200 text-gray-600 hover:border-amber-500 hover:text-amber-500 transition-all shadow-sm rounded-sm text-xs md:text-sm font-bold tracking-wide uppercase">
+              <button 
+                key={idx}
+                onClick={() => setSelectedZona(ZONAS_MAPA[idx])}
+                className={`px-4 py-2 md:px-8 md:py-3 transition-all shadow-sm rounded-sm text-xs md:text-sm font-bold tracking-wide uppercase ${
+                  selectedZona?.nombre === zona
+                    ? 'bg-amber-500 text-white border border-amber-500'
+                    : 'bg-white border border-gray-200 text-gray-600 hover:border-amber-500 hover:text-amber-500'
+                }`}
+              >
                 {zona}
               </button>
             ))}
@@ -603,16 +634,40 @@ const Areas = () => {
         
         <RevealOnScroll delay={400}>
           <div className="mt-8 md:mt-12 w-full h-[250px] md:h-[500px] bg-gray-900 rounded-xl overflow-hidden relative group shadow-lg">
-            <img 
-              src="https://images.unsplash.com/photo-1596131398453-82e5b3946609?auto=format&fit=crop&q=80&w=2000&saturation=-80" 
-              alt="Mapa" 
-              className="w-full h-full object-cover opacity-50"
-            />
-            <div className="absolute inset-0 flex items-center justify-center">
-                <button className="bg-white text-gray-900 px-6 py-3 md:px-10 md:py-5 rounded-sm shadow-xl text-xs md:text-sm font-bold hover:bg-amber-500 hover:text-white transition-colors uppercase tracking-widest flex items-center gap-2">
-                  <Map size={16} /> Ver Mapa
-                </button>
-            </div>
+            <MapContainer 
+              center={[21.0631, -87.0694]} 
+              zoom={12} 
+              style={{ height: '100%', width: '100%' }}
+              className="rounded-xl"
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              />
+              {ZONAS_MAPA.map((zona, idx) => (
+                <Marker 
+                  key={idx} 
+                  position={[zona.lat, zona.lng]}
+                  eventHandlers={{
+                    click: () => setSelectedZona(zona),
+                  }}
+                >
+                  <Popup className="rounded-lg">
+                    <div className="text-center">
+                      <h3 className="font-bold text-gray-900 mb-1">{zona.nombre}</h3>
+                      <p className="text-xs text-gray-600">{zona.desc}</p>
+                    </div>
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
+            
+            {selectedZona && (
+              <div className="absolute bottom-4 left-4 right-4 bg-white text-gray-900 p-4 rounded-lg shadow-lg max-w-xs">
+                <h4 className="font-bold mb-1">{selectedZona.nombre}</h4>
+                <p className="text-sm text-gray-600">{selectedZona.desc}</p>
+              </div>
+            )}
           </div>
         </RevealOnScroll>
       </div>
