@@ -262,7 +262,7 @@ const Hero = () => {
   const getFadeLeftClass = (delay) => `${transitionBase} ${isMounted ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'} ${delay}`;
 
   return (
-    <section className="relative h-[90vh] md:h-screen flex items-center bg-gray-900 overflow-hidden">
+    <section className="relative min-h-[100dvh] md:h-screen flex items-center bg-gray-900 overflow-hidden">
       
       <div className="absolute inset-0 z-0">
         {HERO_IMAGES.map((img, index) => (
@@ -334,6 +334,105 @@ const Hero = () => {
       </div>
 
     </section>
+  );
+};
+
+const AdvisorSection = () => {
+  const containerRef = useRef(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+      
+      const rect = containerRef.current.getBoundingClientRect();
+      const containerHeight = containerRef.current.offsetHeight;
+      const viewportHeight = window.innerHeight;
+      
+      const scrollableDistance = containerHeight - viewportHeight;
+      const scrolled = -rect.top;
+      
+      if (scrolled >= 0 && scrolled <= scrollableDistance) {
+        const progress = Math.min(1, Math.max(0, scrolled / scrollableDistance));
+        setScrollProgress(progress);
+      } else if (scrolled < 0) {
+        setScrollProgress(0);
+      } else {
+        setScrollProgress(1);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const cardScale = 1.3 - (scrollProgress * 0.5);
+  const cardTranslateX = scrollProgress * -25;
+  const textOpacity = scrollProgress;
+  const textTranslateX = 50 - (scrollProgress * 50);
+
+  return (
+    <div ref={containerRef} className="relative h-[200vh] bg-gray-900">
+      <div className="sticky top-0 h-screen overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950"></div>
+        
+        <div className="container mx-auto px-4 md:px-6 h-full relative z-10">
+          <div className="flex flex-col md:flex-row items-center justify-center h-full gap-6 md:gap-20">
+            
+            <div 
+              className="relative will-change-transform"
+              style={{
+                transform: `scale(${cardScale}) translateX(${cardTranslateX}%)`,
+                transition: 'transform 0.1s ease-out',
+              }}
+            >
+              <div className="w-[240px] h-[320px] md:w-[280px] md:h-[400px] border-[4px] md:border-[6px] border-amber-500/20 rounded-2xl overflow-hidden shadow-2xl bg-gray-900 relative transform rotate-2 hover:rotate-0 transition-all duration-700">
+                <img 
+                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800" 
+                  alt="Asesor Inmobiliario" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute bottom-0 left-0 right-0 p-5 md:p-8 z-20 bg-gradient-to-t from-black/90 to-transparent">
+                  <p className="text-white font-bold text-lg md:text-2xl mb-1">Tu Nombre</p>
+                  <div className="flex items-center gap-2 text-amber-400 text-[10px] md:text-xs font-bold uppercase tracking-wider">
+                    <Award size={12} /> Agente Certificado
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div 
+              className="text-center md:text-left max-w-md md:max-w-lg will-change-transform"
+              style={{
+                opacity: textOpacity,
+                transform: `translateX(${textTranslateX}px)`,
+                transition: 'opacity 0.15s ease-out, transform 0.15s ease-out',
+              }}
+            >
+              <h4 className="text-amber-500 font-bold tracking-widest text-xs md:text-sm mb-3 md:mb-4">TU ASESOR</h4>
+              <h2 className="text-2xl md:text-5xl font-light text-white mb-4 md:mb-6 leading-tight">
+                Tu aliado en <br/>
+                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-amber-200">
+                  bienes raíces
+                </span>
+              </h2>
+              <p className="text-gray-300 text-sm md:text-xl font-light leading-relaxed mb-6 md:mb-8 italic">
+                "Transformo sueños en direcciones. Cada propiedad cuenta una historia, déjame ayudarte a escribir la tuya."
+              </p>
+              <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-start">
+                <span className="px-3 py-1 md:px-5 md:py-2 bg-white/5 text-xs md:text-sm rounded-full border border-white/10 flex items-center gap-2 text-gray-300">
+                  <CheckCircle size={14} className="text-amber-500" /> +10 años
+                </span>
+                <span className="px-3 py-1 md:px-5 md:py-2 bg-white/5 text-xs md:text-sm rounded-full border border-white/10 flex items-center gap-2 text-gray-300">
+                  <CheckCircle size={14} className="text-amber-500" /> +200 propiedades
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -869,6 +968,7 @@ function App() {
     <div className="font-sans text-gray-900 bg-white antialiased selection:bg-amber-500/30 selection:text-amber-900">
       <Navbar />
       <Hero />
+      <AdvisorSection />
       <Properties />
       <Services />
       <Experience />
