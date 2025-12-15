@@ -225,7 +225,12 @@ const Navbar = () => {
           ))}
         </div>
 
-        <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-amber-500 p-1">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+          aria-label="Abrir o cerrar menú de navegación"
+          className="md:hidden text-amber-500 p-1 focus-visible:outline-amber-500"
+        >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -295,17 +300,30 @@ const Hero = () => {
             </span>
           </h1>
 
+          <p className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-xs md:text-sm uppercase tracking-[0.28em] text-amber-200 ${getFadeUpClass('delay-[500ms]')}`}>
+            <MapPin size={16} /> Cancún &amp; Riviera Maya
+          </p>
+
           <p className={`text-base md:text-xl text-gray-300 max-w-lg mx-auto md:mx-0 font-light leading-relaxed ${getFadeUpClass('delay-[600ms]')}`}>
-            Encuentra tu espacio ideal en Cancún. Acceso exclusivo al mercado de lujo.
+            Encuentra tu espacio ideal en Cancún con estrategias de plusvalía, rutas de inversión y acompañamiento certificado.
           </p>
           
           <div className={`flex flex-col md:flex-row gap-3 md:gap-5 pt-4 ${getFadeUpClass('delay-[800ms]')}`}>
-            <a href="#propiedades" className="bg-amber-500 text-white w-full md:w-auto px-8 py-3 md:py-4 font-bold tracking-wider hover:bg-amber-600 transition-all text-center shadow-lg text-sm uppercase rounded-sm">
+            <a href="#propiedades" className="bg-amber-500 text-white w-full md:w-auto px-8 py-3 md:py-4 font-bold tracking-wider hover:bg-amber-600 transition-all text-center shadow-lg text-sm uppercase rounded-sm focus-visible:outline-amber-500" aria-label="Ver catálogo de propiedades premium">
               Ver Catálogo
             </a>
-            <a href="#contacto" className="border-2 border-white text-white w-full md:w-auto px-8 py-3 md:py-4 font-bold tracking-wider hover:bg-white hover:text-gray-900 transition-all text-center text-sm uppercase rounded-sm">
+            <a href="#contacto" className="border-2 border-white text-white w-full md:w-auto px-8 py-3 md:py-4 font-bold tracking-wider hover:bg-white hover:text-gray-900 transition-all text-center text-sm uppercase rounded-sm focus-visible:outline-amber-500" aria-label="Contactar a un asesor inmobiliario">
               Contactar
             </a>
+          </div>
+
+          <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 pt-2 md:pt-6 ${getFadeUpClass('delay-[900ms]')}`}>
+            {[{ label: 'Respuesta en 2h', detail: 'Seguimiento inmediato por WhatsApp' }, { label: 'Análisis de plusvalía', detail: 'Datos de mercado y proyecciones' }, { label: 'Tour digital', detail: 'Recorridos guiados sin desplazarte' }].map((item, idx) => (
+              <div key={idx} className="bg-white/5 border border-white/10 rounded-lg px-4 py-3 md:px-5 md:py-4 text-left shadow-sm">
+                <p className="text-xs md:text-sm text-amber-200 font-bold uppercase tracking-[0.2em] mb-1">{item.label}</p>
+                <p className="text-[11px] md:text-sm text-gray-200 leading-relaxed">{item.detail}</p>
+              </div>
+            ))}
           </div>
         </div>
         
@@ -440,11 +458,13 @@ const PropertyModal = ({ property, onClose }) => {
   if (!property) return null;
   
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in" role="dialog" aria-modal="true" aria-label={`Detalles de ${property.titulo}`}>
       <div className="bg-white w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-lg shadow-2xl relative animate-slide-up flex flex-col">
-        <button 
+        <button
           onClick={onClose}
-          className="absolute top-4 right-4 bg-white/80 rounded-full p-2 hover:bg-white z-20 text-gray-900 shadow-md"
+          type="button"
+          aria-label="Cerrar detalles de la propiedad"
+          className="absolute top-4 right-4 bg-white/80 rounded-full p-2 hover:bg-white z-20 text-gray-900 shadow-md focus-visible:outline-amber-500"
         >
           <X size={20} />
         </button>
@@ -487,10 +507,10 @@ const PropertyModal = ({ property, onClose }) => {
           </p>
 
           <div className="flex flex-col gap-3">
-            <button className="w-full bg-gray-900 text-white py-4 font-bold tracking-widest hover:bg-amber-600 transition-colors flex items-center justify-center gap-2 uppercase text-xs md:text-sm rounded-sm">
+            <button className="w-full bg-gray-900 text-white py-4 font-bold tracking-widest hover:bg-amber-600 transition-colors flex items-center justify-center gap-2 uppercase text-xs md:text-sm rounded-sm focus-visible:outline-amber-500">
               <MessageCircle size={18} /> Info por WhatsApp
             </button>
-            <button className="w-full border-2 border-gray-900 text-gray-900 py-4 font-bold tracking-widest hover:bg-gray-900 hover:text-white transition-colors uppercase text-xs md:text-sm rounded-sm">
+            <button className="w-full border-2 border-gray-900 text-gray-900 py-4 font-bold tracking-widest hover:bg-gray-900 hover:text-white transition-colors uppercase text-xs md:text-sm rounded-sm focus-visible:outline-amber-500">
               Agendar Visita
             </button>
           </div>
@@ -514,16 +534,20 @@ const Properties = () => {
             <div>
               <h4 className="text-amber-500 font-bold tracking-widest text-xs md:text-sm mb-2 md:mb-4">CATÁLOGO</h4>
               <h2 className="text-3xl md:text-5xl font-bold text-gray-900">Destacadas</h2>
+              <p className="text-gray-500 text-sm md:text-base mt-2 max-w-xl">
+                Propiedades revisadas con reporte de plusvalía, acceso a amenidades y disponibilidad confirmada.
+              </p>
             </div>
-            
+
             <div className="flex space-x-2 mt-4 md:mt-0 bg-gray-100 p-1 rounded-lg w-full md:w-auto">
               {['todos', 'venta', 'renta'].map(type => (
                 <button
                   key={type}
                   onClick={() => setFilter(type)}
+                  aria-pressed={filter === type}
                   className={`flex-1 md:flex-none px-4 md:px-8 py-2 md:py-3 text-xs md:text-sm font-bold transition-all rounded-md ${
-                    filter === type 
-                      ? 'bg-white text-gray-900 shadow-md' 
+                    filter === type
+                      ? 'bg-white text-gray-900 shadow-md'
                       : 'text-gray-500 hover:text-gray-900'
                   } capitalize tracking-wide text-center`}
                 >
@@ -537,10 +561,17 @@ const Properties = () => {
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-10">
           {filteredProps.map((prop, index) => (
             <RevealOnScroll key={prop.id} delay={index * 50}>
-              <div onClick={() => setSelectedProp(prop)} className="group cursor-pointer bg-white border border-gray-100 rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+              <div
+                onClick={() => setSelectedProp(prop)}
+                role="button"
+                tabIndex={0}
+                aria-label={`Ver detalles de ${prop.titulo} en ${prop.ubicacion}`}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setSelectedProp(prop)}
+                className="group cursor-pointer bg-white border border-gray-100 rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 focus-visible:outline-amber-500"
+              >
                 <div className="relative aspect-square md:aspect-[4/3] bg-gray-200 overflow-hidden">
-                  <img 
-                    src={prop.imagen} 
+                  <img
+                    src={prop.imagen}
                     alt={prop.titulo} 
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   />
@@ -896,19 +927,23 @@ const Contact = () => {
               <h3 className="text-xl md:text-2xl font-bold mb-6 md:mb-8">Mensaje directo</h3>
               <form className="grid md:grid-cols-2 gap-4 md:gap-8">
                 <div className="md:col-span-2">
-                  <input type="text" className="w-full bg-gray-50 border-b-2 border-gray-200 p-3 md:p-4 focus:border-amber-500 focus:outline-none text-sm font-medium" placeholder="NOMBRE" />
+                  <label className="sr-only" htmlFor="nombre">Nombre</label>
+                  <input id="nombre" name="nombre" type="text" className="w-full bg-gray-50 border-b-2 border-gray-200 p-3 md:p-4 focus:border-amber-500 focus:outline-none text-sm font-medium" placeholder="NOMBRE" autoComplete="name" />
                 </div>
                 <div>
-                  <input type="email" className="w-full bg-gray-50 border-b-2 border-gray-200 p-3 md:p-4 focus:border-amber-500 focus:outline-none text-sm font-medium" placeholder="CORREO" />
+                  <label className="sr-only" htmlFor="correo">Correo electrónico</label>
+                  <input id="correo" name="correo" type="email" className="w-full bg-gray-50 border-b-2 border-gray-200 p-3 md:p-4 focus:border-amber-500 focus:outline-none text-sm font-medium" placeholder="CORREO" autoComplete="email" />
                 </div>
                 <div>
-                  <input type="tel" className="w-full bg-gray-50 border-b-2 border-gray-200 p-3 md:p-4 focus:border-amber-500 focus:outline-none text-sm font-medium" placeholder="WHATSAPP" />
+                  <label className="sr-only" htmlFor="whatsapp">WhatsApp</label>
+                  <input id="whatsapp" name="whatsapp" type="tel" className="w-full bg-gray-50 border-b-2 border-gray-200 p-3 md:p-4 focus:border-amber-500 focus:outline-none text-sm font-medium" placeholder="WHATSAPP" autoComplete="tel" />
                 </div>
                 <div className="md:col-span-2">
-                  <textarea className="w-full bg-gray-50 border-b-2 border-gray-200 p-3 md:p-4 focus:border-amber-500 focus:outline-none h-24 md:h-32 resize-none text-sm font-medium" placeholder="MENSAJE..." ></textarea>
+                  <label className="sr-only" htmlFor="mensaje">Mensaje</label>
+                  <textarea id="mensaje" name="mensaje" className="w-full bg-gray-50 border-b-2 border-gray-200 p-3 md:p-4 focus:border-amber-500 focus:outline-none h-24 md:h-32 resize-none text-sm font-medium" placeholder="MENSAJE..." ></textarea>
                 </div>
                 <div className="md:col-span-2 mt-4">
-                  <button type="button" className="w-full bg-amber-500 text-white py-4 md:py-5 font-bold tracking-[0.2em] hover:bg-amber-600 transition-all uppercase text-xs md:text-sm rounded-sm shadow-lg">
+                  <button type="button" className="w-full bg-amber-500 text-white py-4 md:py-5 font-bold tracking-[0.2em] hover:bg-amber-600 transition-all uppercase text-xs md:text-sm rounded-sm shadow-lg focus-visible:outline-amber-500">
                     Enviar
                   </button>
                 </div>
@@ -950,11 +985,12 @@ const Footer = () => {
 
 const WhatsAppButton = () => {
   return (
-    <a 
-      href="https://wa.me/529980000000" 
-      target="_blank" 
+    <a
+      href="https://wa.me/529980000000"
+      target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 bg-[#25D366] text-white p-3 md:p-4 rounded-full shadow-2xl hover:bg-[#20ba5a] transition-all hover:scale-110 flex items-center justify-center group"
+      aria-label="Abrir chat de WhatsApp con el asesor"
+      className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 bg-[#25D366] text-white p-3 md:p-4 rounded-full shadow-2xl hover:bg-[#20ba5a] transition-all hover:scale-110 flex items-center justify-center group focus-visible:outline-amber-500"
     >
       <MessageCircle size={28} className="md:w-9 md:h-9" fill="white" />
     </a>
@@ -966,17 +1002,25 @@ const WhatsAppButton = () => {
 function App() {
   return (
     <div className="font-sans text-gray-900 bg-white antialiased selection:bg-amber-500/30 selection:text-amber-900">
+      <a
+        href="#contenido-principal"
+        className="sr-only focus:not-sr-only focus-visible:outline-amber-500 bg-white text-gray-900 px-4 py-2 rounded-sm shadow-lg absolute top-4 left-4 z-50"
+      >
+        Saltar al contenido principal
+      </a>
       <Navbar />
-      <Hero />
-      <AdvisorSection />
-      <Properties />
-      <Services />
-      <Experience />
-      <Testimonials />
-      <Areas />
-      <About />
-      <Destination />
-      <Contact />
+      <main id="contenido-principal">
+        <Hero />
+        <AdvisorSection />
+        <Properties />
+        <Services />
+        <Experience />
+        <Testimonials />
+        <Areas />
+        <About />
+        <Destination />
+        <Contact />
+      </main>
       <Footer />
       <WhatsAppButton />
     </div>
