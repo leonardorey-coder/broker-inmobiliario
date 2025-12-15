@@ -183,19 +183,46 @@ const SERVICIOS = [
   { icon: <CheckCircle size={24} />, title: "Promoción", desc: "Marketing agresivo." },
 ];
 
-const ZONAS = [
-  "Zona Hotelera", "Puerto Cancún", "Huayacán", "Lagos del Sol", "Zona Sur", "Centro"
+const ZONAS_MAPA = [
+  {
+    nombre: "Zona Hotelera",
+    lat: 21.0797,
+    lng: -86.7735,
+    desc: "Zona Hotelera - Lujo y turismo"
+  },
+  {
+    nombre: "Puerto Cancún",
+    lat: 21.1556,
+    lng: -86.8067,
+    desc: "Puerto Cancún - Marina privada"
+  },
+  {
+    nombre: "Huayacán",
+    lat: 21.0463,
+    lng: -86.8479,
+    desc: "Huayacán - Residencial premium"
+  },
+  {
+    nombre: "Lagos del Sol",
+    lat: 21.0369,
+    lng: -86.9032,
+    desc: "Lagos del Sol - Inversión"
+  },
+  {
+    nombre: "Zona Sur",
+    lat: 20.9839,
+    lng: -86.8503,
+    desc: "Zona Sur - Privada y segura"
+  },
+  {
+    nombre: "Centro",
+    lat: 21.1619,
+    lng: -86.8515,
+    desc: "Centro - Comercial y ejecutivo"
+  }
 ];
 
-// Datos de zonas con coordenadas para el mapa
-const ZONAS_MAPA = [
-  { nombre: "Zona Hotelera", lat: 21.0631, lng: -87.0694, desc: "Zona Hotelera - Lujo y turismo" },
-  { nombre: "Puerto Cancún", lat: 21.1289, lng: -87.0831, desc: "Puerto Cancún - Marina privada" },
-  { nombre: "Huayacán", lat: 20.9982, lng: -87.2682, desc: "Huayacán - Residencial premium" },
-  { nombre: "Lagos del Sol", lat: 21.0453, lng: -87.2734, desc: "Lagos del Sol - Inversión" },
-  { nombre: "Zona Sur", lat: 20.8823, lng: -87.0825, desc: "Zona Sur - Privada y segura" },
-  { nombre: "Centro", lat: 20.9324, lng: -87.3262, desc: "Centro - Comercial y ejecutivo" }
-];
+const ZONAS = ZONAS_MAPA.map(z => z.nombre);
 
 /* --- COMPONENTES --- */
 
@@ -439,8 +466,14 @@ const AdvisorSection = () => {
 const PropertyModal = ({ property, onClose }) => {
   if (!property) return null;
   
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+  
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in" onClick={handleBackdropClick}>
       <div className="bg-white w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-lg shadow-2xl relative animate-slide-up flex flex-col">
         <button 
           onClick={onClose}
@@ -702,7 +735,14 @@ const Testimonials = () => {
 };
 
 const Areas = () => {
-  const [selectedZona, setSelectedZona] = useState(null);
+  const [selectedZona, setSelectedZona] = useState(ZONAS_MAPA[0]); // Inicia con primera zona
+
+  const handleZonaClick = (zonaName) => {
+    const zona = ZONAS_MAPA.find(z => z.nombre === zonaName);
+    if (zona) {
+      setSelectedZona(zona);
+    }
+  };
 
   return (
     <section className="py-16 md:py-24 bg-gray-50">
@@ -719,7 +759,7 @@ const Areas = () => {
             {ZONAS.map((zona, idx) => (
               <button 
                 key={idx}
-                onClick={() => setSelectedZona(ZONAS_MAPA[idx])}
+                onClick={() => handleZonaClick(zona)}
                 className={`px-4 py-2 md:px-8 md:py-3 transition-all shadow-sm rounded-sm text-xs md:text-sm font-bold tracking-wide uppercase ${
                   selectedZona?.nombre === zona
                     ? 'bg-amber-500 text-white border border-amber-500'
@@ -735,10 +775,11 @@ const Areas = () => {
         <RevealOnScroll delay={400}>
           <div className="mt-8 md:mt-12 w-full h-[250px] md:h-[500px] bg-gray-900 rounded-xl overflow-hidden relative group shadow-lg">
             <MapContainer 
-              center={[21.0631, -87.0694]} 
+              center={[selectedZona?.lat || 21.0631, selectedZona?.lng || -87.0694]} 
               zoom={12} 
               style={{ height: '100%', width: '100%' }}
               className="rounded-xl"
+              key={`${selectedZona?.lat}-${selectedZona?.lng}`}
             >
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
