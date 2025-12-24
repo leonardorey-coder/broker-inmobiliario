@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Menu, X, MapPin, Bed, Bath, Move, Star, Phone, Mail, 
+import {
+  Menu, X, MapPin, Bed, Bath, Move, Star, Phone, Mail,
   Instagram, Facebook, Linkedin, ArrowRight, CheckCircle,
   Home, TrendingUp, DollarSign, Award, Map, MessageCircle,
-  ChevronDown
+  ChevronDown, Heart, Bookmark
 } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
@@ -139,9 +139,8 @@ const RevealOnScroll = ({ children, delay = 0, className = "" }) => {
   return (
     <div
       ref={ref}
-      className={`transition-all duration-1000 ease-out transform ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'
-      } ${className}`}
+      className={`transition-all duration-1000 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'
+        } ${className}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
       {children}
@@ -316,9 +315,111 @@ const ZONAS_MAPA = [
 
 const ZONAS = ZONAS_MAPA.map(z => z.nombre);
 
+/* --- FEED DATA --- */
+
+const FEED_POSTS = [
+  {
+    id: 1,
+    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=800",
+    likes: 124,
+    caption: "Nueva captación en Puerto Cancún. Vistas inigualables al mar Caribe. 🌊🏠 #LuxuryRealEstate #Cancun #Mexico",
+    date: "Hace 2 horas"
+  },
+  {
+    id: 2,
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800",
+    likes: 89,
+    caption: "Entrega de llaves exitosa. Felicidades a la familia R. por su nuevo hogar. 🗝️✨ #Sold #RealEstateLife",
+    date: "Hace 1 día"
+  },
+  {
+    id: 3,
+    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800",
+    likes: 256,
+    caption: "Invirtiendo en el futuro. Lagos del Sol es la zona con mayor plusvalía este año. 📈🌴 #Investment #CancunRealEstate",
+    date: "Hace 3 días"
+  }
+];
+
 /* --- COMPONENTES --- */
 
-const Navbar = () => {
+const FeedModal = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex justify-center items-start overflow-y-auto animate-fade-in">
+
+      <button
+        onClick={onClose}
+        className="fixed top-6 right-6 text-white hover:text-amber-500 transition-colors z-50 bg-black/50 p-2 rounded-full"
+      >
+        <X size={32} />
+      </button>
+
+      <div className="w-full max-w-md py-10 px-4 animate-slide-up">
+        <h2 className="text-amber-500 font-bold tracking-[0.2em] text-center mb-8 uppercase text-sm">Social Feed</h2>
+
+        <div className="space-y-8">
+          {FEED_POSTS.map((post) => (
+            <div key={post.id} className="bg-white rounded-xl overflow-hidden shadow-2xl">
+              <div className="p-3 flex items-center gap-3 border-b border-gray-100">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-400 to-amber-600 p-[2px]">
+                  <div className="w-full h-full rounded-full bg-white p-[1px]">
+                    <img
+                      src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=100"
+                      alt="Profile"
+                      className="w-full h-full rounded-full object-cover"
+                    />
+                  </div>
+                </div>
+                <span className="font-bold text-sm text-gray-900">luxrealty.cancun</span>
+              </div>
+
+              <div className="aspect-square bg-gray-100">
+                <img src={post.image} alt="Post" className="w-full h-full object-cover" />
+              </div>
+
+              <div className="p-4">
+                <div className="flex gap-3 mb-3">
+                  <button className="hover:text-amber-500 hover:scale-110 transition-all cursor-pointer text-gray-800">
+                    <Heart size={24} />
+                  </button>
+                  <button className="hover:text-amber-500 hover:scale-110 transition-all cursor-pointer text-gray-800">
+                    <MessageCircle size={24} />
+                  </button>
+                  <button className="hover:text-amber-500 hover:scale-110 transition-all cursor-pointer ml-auto text-gray-800">
+                    <Bookmark size={24} />
+                  </button>
+                </div>
+
+                <div className="mb-2">
+                  <span className="font-bold text-sm text-gray-900">{post.likes} Me gusta</span>
+                </div>
+
+                <div className="text-sm text-gray-800 mb-2">
+                  <span className="font-bold mr-2">luxrealty.cancun</span>
+                  {post.caption}
+                </div>
+
+                <div className="text-[10px] text-gray-400 uppercase tracking-wide">
+                  {post.date}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="text-center mt-8 pb-8">
+          <button onClick={onClose} className="text-white/50 hover:text-white text-sm uppercase tracking-widest transition-colors">
+            Cerrar Feed
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Navbar = ({ onOpenFeed }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -337,11 +438,15 @@ const Navbar = () => {
 
         <div className={`hidden md:flex space-x-8 font-medium text-sm tracking-wide ${scrolled ? 'text-gray-800' : 'text-white'}`}>
           {['Propiedades', 'Servicios', 'Experiencia', 'Contacto'].map((item) => (
-             <a key={item} href={`#${item.toLowerCase()}`} className="hover:text-amber-500 transition-colors relative group">
+            <a key={item} href={`#${item.toLowerCase()}`} className="hover:text-amber-500 transition-colors relative group">
               {item.toUpperCase()}
               <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-amber-500 transition-all group-hover:w-full"></span>
             </a>
           ))}
+          <button onClick={onOpenFeed} className="hover:text-amber-500 transition-colors relative group font-bold text-amber-500">
+            FEED
+            <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-amber-500 transition-all group-hover:w-full"></span>
+          </button>
         </div>
 
         <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-amber-500 p-1">
@@ -355,6 +460,9 @@ const Navbar = () => {
             {item.toUpperCase()}
           </a>
         ))}
+        <button onClick={() => { setIsOpen(false); onOpenFeed(); }} className="text-amber-500 font-bold text-sm tracking-widest hover:text-amber-600 w-full text-center py-2">
+          FEED
+        </button>
       </div>
     </nav>
   );
@@ -382,21 +490,19 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-[100dvh] md:h-screen flex items-center bg-gray-900 overflow-hidden">
-      
+
       <div className="absolute inset-0 z-0">
         {HERO_IMAGES.map((img, index) => (
-          <div 
+          <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              index === currentBgIndex ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <img 
-              src={img} 
-              alt={`Luxury Background ${index + 1}`} 
-              className={`w-full h-full object-cover transition-transform duration-[20s] ease-linear ${
-                isMounted && index === currentBgIndex ? 'scale-110' : 'scale-100'
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentBgIndex ? 'opacity-100' : 'opacity-0'
               }`}
+          >
+            <img
+              src={img}
+              alt={`Luxury Background ${index + 1}`}
+              className={`w-full h-full object-cover transition-transform duration-[20s] ease-linear ${isMounted && index === currentBgIndex ? 'scale-110' : 'scale-100'
+                }`}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 md:bg-gradient-to-r"></div>
           </div>
@@ -408,7 +514,7 @@ const Hero = () => {
           <div className={`w-16 h-1 bg-amber-500 mb-4 md:mb-6 mx-auto ${getFadeUpClass('delay-[200ms]')}`}></div>
 
           <h1 className={`text-4xl md:text-7xl lg:text-8xl font-light leading-tight ${getFadeUpClass('delay-[400ms]')}`}>
-            Asesoría <br/>
+            Asesoría <br />
             <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-amber-200">
               Inmobiliaria
             </span>
@@ -417,7 +523,7 @@ const Hero = () => {
           <p className={`text-base md:text-xl lg:text-2xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed ${getFadeUpClass('delay-[600ms]')}`}>
             Encuentra tu espacio ideal en Cancún. Acceso exclusivo al mercado de lujo.
           </p>
-          
+
           <div className={`flex flex-col md:flex-row gap-3 md:gap-5 pt-4 justify-center ${getFadeUpClass('delay-[800ms]')}`}>
             <a href="#propiedades" className="bg-amber-500 text-white w-full md:w-auto px-8 py-3 md:py-4 font-bold tracking-wider hover:bg-amber-600 transition-all text-center shadow-lg text-sm uppercase rounded-sm">
               Ver Catálogo
@@ -440,21 +546,21 @@ const Hero = () => {
   );
 };
 
-const AdvisorSection = () => {
+const AdvisorSection = ({ onOpenFeed }) => {
   const containerRef = useRef(null);
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current) return;
-      
+
       const rect = containerRef.current.getBoundingClientRect();
       const containerHeight = containerRef.current.offsetHeight;
       const viewportHeight = window.innerHeight;
-      
+
       const scrollableDistance = containerHeight - viewportHeight;
       const scrolled = -rect.top;
-      
+
       if (scrolled >= 0 && scrolled <= scrollableDistance) {
         const progress = Math.min(1, Math.max(0, scrolled / scrollableDistance));
         setScrollProgress(progress);
@@ -477,12 +583,12 @@ const AdvisorSection = () => {
 
   const cardTranslateY = 100 - (phase1 * 100);
   const cardOpacity = phase1;
-  
+
   const cardFlipRotation = phase4 * 180;
-  
+
   const titleOpacity = phase2;
   const titleTranslateY = 50 - (phase2 * 50);
-  
+
   const contentOpacity = phase3;
   const contentTranslateX = 30 - (phase3 * 30);
 
@@ -498,56 +604,56 @@ const AdvisorSection = () => {
           <div className="absolute top-1/4 left-0 w-px h-1/2 bg-gradient-to-b from-transparent via-amber-500/15 to-transparent hidden lg:block"></div>
           <div className="absolute top-1/4 right-0 w-px h-1/2 bg-gradient-to-b from-transparent via-amber-500/15 to-transparent hidden lg:block"></div>
         </div>
-        
+
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 h-full relative z-10 flex items-start lg:items-center pt-24 sm:pt-28 lg:pt-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 items-start lg:items-center w-full gap-8 sm:gap-10 lg:gap-12 pb-8 lg:pb-16">
-            
-            <div 
-              className="lg:col-span-5 relative will-change-transform flex justify-center order-1 mt-4 lg:mt-0"
+
+            <div
+              className="lg:col-span-5 relative will-change-transform flex flex-col items-center justify-center order-1 mt-4 lg:mt-0"
               style={{
                 transform: `translateY(${cardTranslateY}px)`,
                 opacity: cardOpacity,
               }}
             >
-              <div 
+              <div
                 className="relative w-[180px] h-[250px] sm:w-[220px] sm:h-[310px] md:w-[260px] md:h-[360px] lg:w-[280px] lg:h-[380px] xl:w-[320px] xl:h-[420px]"
                 style={{ perspective: '1200px' }}
               >
-                <div 
+                <div
                   className="relative w-full h-full transition-transform duration-700 ease-out"
-                  style={{ 
+                  style={{
                     transformStyle: 'preserve-3d',
                     transform: `rotateY(${cardFlipRotation}deg)`,
                   }}
                 >
-                  <div 
+                  <div
                     className="absolute inset-0 rounded-lg overflow-hidden shadow-[0_30px_70px_-20px_rgba(0,0,0,0.6)] border border-white/10"
                     style={{ backfaceVisibility: 'hidden' }}
                   >
-                    <img 
-                      src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800" 
-                      alt="Asesor Inmobiliario" 
+                    <img
+                      src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800"
+                      alt="Asesor Inmobiliario"
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"></div>
                     <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent"></div>
-                    
+
                     <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 md:p-8">
                       <div className="w-12 h-[2px] bg-gradient-to-r from-amber-400 to-amber-500 mb-4 sm:mb-5"></div>
                       <p className="text-white font-semibold text-lg sm:text-xl md:text-2xl lg:text-3xl tracking-wide">Tu Nombre</p>
                       <p className="text-amber-400/90 text-[11px] sm:text-xs font-medium uppercase tracking-[0.2em] mt-2">Luxury Real Estate</p>
                     </div>
-                    
+
                     <div className="absolute top-4 right-4 sm:top-5 sm:right-5">
                       <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/30 backdrop-blur-sm border border-amber-400/40 flex items-center justify-center">
                         <Award size={18} className="sm:w-5 sm:h-5 text-amber-400" />
                       </div>
                     </div>
                   </div>
-                  
-                  <div 
+
+                  <div
                     className="absolute inset-0 rounded-lg overflow-hidden shadow-[0_30px_70px_-20px_rgba(0,0,0,0.6)] bg-gradient-to-br from-gray-900 via-gray-900 to-black border border-white/10 p-5 sm:p-6 md:p-7 lg:p-8 flex flex-col justify-between"
-                    style={{ 
+                    style={{
                       backfaceVisibility: 'hidden',
                       transform: 'rotateY(180deg)',
                     }}
@@ -559,7 +665,7 @@ const AdvisorSection = () => {
                         Especialista certificado en el mercado de lujo de Cancún y Riviera Maya.
                       </p>
                     </div>
-                    
+
                     <div className="space-y-3 sm:space-y-4">
                       <div className="flex items-center gap-4 py-3 border-b border-white/5">
                         <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-amber-500/20 to-amber-600/5 flex items-center justify-center shrink-0 border border-amber-500/20">
@@ -570,7 +676,7 @@ const AdvisorSection = () => {
                           <span className="text-gray-500 text-[10px] sm:text-xs uppercase tracking-widest">En ventas totales</span>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-4 py-3 border-b border-white/5">
                         <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-amber-500/20 to-amber-600/5 flex items-center justify-center shrink-0 border border-amber-500/20">
                           <Home size={16} className="sm:w-[18px] sm:h-[18px] text-amber-400" />
@@ -580,7 +686,7 @@ const AdvisorSection = () => {
                           <span className="text-gray-500 text-[10px] sm:text-xs uppercase tracking-widest">Propiedades vendidas</span>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-4 py-3">
                         <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-amber-500/20 to-amber-600/5 flex items-center justify-center shrink-0 border border-amber-500/20">
                           <Star size={16} className="sm:w-[18px] sm:h-[18px] text-amber-400" />
@@ -591,7 +697,7 @@ const AdvisorSection = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex flex-wrap gap-2 mt-4">
                       <span className="px-3 py-1.5 bg-gradient-to-r from-amber-500/10 to-transparent text-[10px] sm:text-xs rounded text-amber-400 border border-amber-500/25 font-medium tracking-wider">AMPI</span>
                       <span className="px-3 py-1.5 bg-gradient-to-r from-amber-500/10 to-transparent text-[10px] sm:text-xs rounded text-amber-400 border border-amber-500/25 font-medium tracking-wider">Luxury</span>
@@ -600,10 +706,18 @@ const AdvisorSection = () => {
                   </div>
                 </div>
               </div>
+
+              <button
+                onClick={onOpenFeed}
+                className="mt-6 md:mt-8 px-8 py-3 bg-white/5 border border-amber-500/30 hover:bg-amber-500/10 hover:border-amber-500 text-amber-400 text-xs md:text-sm font-bold uppercase tracking-[0.2em] rounded-full transition-all duration-300 flex items-center gap-2 group cursor-pointer backdrop-blur-sm"
+              >
+                <Instagram size={16} className="group-hover:scale-110 transition-transform" />
+                Ver Feed
+              </button>
             </div>
-            
+
             <div className="lg:col-span-7 order-2 text-center lg:text-left">
-              <div 
+              <div
                 className="will-change-transform mb-6 sm:mb-8 lg:mb-6"
                 style={{
                   opacity: titleOpacity,
@@ -615,13 +729,13 @@ const AdvisorSection = () => {
                   <h4 className="text-amber-400 font-medium tracking-[0.25em] sm:tracking-[0.3em] text-xs sm:text-sm">SOBRE MÍ</h4>
                 </div>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-extralight text-white leading-[1.1] mb-4 sm:mb-5">
-                  Tu aliado en <br className="hidden sm:block"/>
+                  Tu aliado en <br className="hidden sm:block" />
                   <span className="font-semibold bg-gradient-to-r from-white via-white to-gray-300 bg-clip-text text-transparent">bienes raíces</span>
                 </h2>
                 <div className="w-20 sm:w-24 h-[2px] bg-gradient-to-r from-amber-400 to-amber-600 mx-auto lg:mx-0"></div>
               </div>
-              
-              <div 
+
+              <div
                 className="will-change-transform space-y-4 sm:space-y-5 lg:space-y-4"
                 style={{
                   opacity: contentOpacity,
@@ -631,7 +745,7 @@ const AdvisorSection = () => {
                 <p className="text-gray-400 text-sm sm:text-base lg:text-base font-light leading-[1.7] max-w-xl mx-auto lg:mx-0 px-2 sm:px-0">
                   Con más de una década de experiencia en el mercado de lujo de Cancún, transformo sueños en direcciones. Mi enfoque está en entender tus necesidades y encontrar la propiedad perfecta.
                 </p>
-                
+
                 <div className="relative max-w-xl mx-auto lg:mx-0">
                   <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-gradient-to-b from-amber-400 via-amber-500 to-amber-600"></div>
                   <div className="pl-5 sm:pl-6 py-3 sm:py-4 bg-gradient-to-r from-white/[0.03] to-transparent rounded-r-lg">
@@ -640,7 +754,7 @@ const AdvisorSection = () => {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex flex-wrap gap-6 sm:gap-8 lg:gap-8 justify-center lg:justify-start pt-2 sm:pt-4">
                   <div className="text-center lg:text-left">
                     <span className="text-3xl sm:text-4xl lg:text-4xl font-light text-white block mb-1">+10</span>
@@ -657,7 +771,7 @@ const AdvisorSection = () => {
                     <span className="text-[10px] sm:text-xs text-amber-400/80 uppercase tracking-[0.2em] font-medium">Satisfacción</span>
                   </div>
                 </div>
-                
+
                 <div className="pt-4 sm:pt-6 lg:pt-4">
                   <a href="#contacto" className="inline-flex items-center gap-3 sm:gap-4 text-white font-medium tracking-wider text-xs sm:text-sm uppercase hover:text-amber-400 transition-all duration-300 group border-b border-white/20 pb-2 hover:border-amber-400/50">
                     Trabajemos juntos
@@ -669,7 +783,7 @@ const AdvisorSection = () => {
           </div>
         </div>
 
-        <div 
+        <div
           className="hidden lg:flex absolute bottom-8 lg:bottom-6 left-1/2 -translate-x-1/2 z-20 flex-col items-center gap-2"
           style={{ opacity: Math.max(0, 1 - scrollProgress * 3) }}
         >
@@ -685,23 +799,23 @@ const AdvisorSection = () => {
 
 const PropertyModal = ({ property, onClose }) => {
   if (!property) return null;
-  
+
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
   };
-  
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in" onClick={handleBackdropClick}>
       <div className="bg-white w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-lg shadow-2xl relative animate-slide-up flex flex-col">
-        <button 
+        <button
           onClick={onClose}
           className="absolute top-4 right-4 bg-white/80 rounded-full p-2 hover:bg-white z-20 text-gray-900 shadow-md"
         >
           <X size={20} />
         </button>
-        
+
         <div className="h-64 sm:h-80 relative shrink-0">
           <img src={property.imagen} alt={property.titulo} className="w-full h-full object-cover" />
           <div className="absolute top-4 left-4 bg-amber-500 text-white px-3 py-1 text-xs font-bold uppercase tracking-wider shadow-sm">
@@ -768,17 +882,16 @@ const Properties = () => {
               <h4 className="text-amber-500 font-bold tracking-widest text-xs md:text-sm mb-2 md:mb-4">CATÁLOGO</h4>
               <h2 className="text-3xl md:text-5xl font-bold text-gray-900">Destacadas</h2>
             </div>
-            
+
             <div className="flex space-x-2 mt-4 md:mt-0 bg-gray-100 p-1 rounded-lg w-full md:w-auto">
               {['todos', 'venta', 'renta'].map(type => (
                 <button
                   key={type}
                   onClick={() => setFilter(type)}
-                  className={`flex-1 md:flex-none px-4 md:px-8 py-2 md:py-3 text-xs md:text-sm font-bold transition-all rounded-md ${
-                    filter === type 
-                      ? 'bg-white text-gray-900 shadow-md' 
-                      : 'text-gray-500 hover:text-gray-900'
-                  } capitalize tracking-wide text-center`}
+                  className={`flex-1 md:flex-none px-4 md:px-8 py-2 md:py-3 text-xs md:text-sm font-bold transition-all rounded-md ${filter === type
+                    ? 'bg-white text-gray-900 shadow-md'
+                    : 'text-gray-500 hover:text-gray-900'
+                    } capitalize tracking-wide text-center`}
                 >
                   {type}
                 </button>
@@ -792,9 +905,9 @@ const Properties = () => {
             <RevealOnScroll key={prop.id} delay={index * 50}>
               <div onClick={() => setSelectedProp(prop)} className="group cursor-pointer bg-white border border-gray-100 rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
                 <div className="relative aspect-square md:aspect-[4/3] bg-gray-200 overflow-hidden">
-                  <img 
-                    src={prop.imagen} 
-                    alt={prop.titulo} 
+                  <img
+                    src={prop.imagen}
+                    alt={prop.titulo}
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   />
                   <div className="absolute top-2 left-2 bg-white/95 backdrop-blur-sm text-gray-900 text-[10px] md:text-xs font-bold px-2 py-1 uppercase tracking-wider rounded-sm">
@@ -812,7 +925,7 @@ const Properties = () => {
                     <ArrowRight size={24} className="bg-amber-500 p-1 rounded-full" />
                   </div>
                 </div>
-                
+
                 <div className="p-3 md:p-5">
                   <div className="mb-2 md:mb-3">
                     <h3 className="text-sm md:text-xl font-bold text-gray-900 truncate leading-tight">{prop.titulo}</h3>
@@ -821,7 +934,7 @@ const Properties = () => {
                   <p className="text-gray-400 text-xs md:text-sm mb-3 md:mb-5 flex items-center gap-1 md:gap-2 truncate">
                     <MapPin size={12} className="text-amber-500 shrink-0" /> {prop.ubicacion}
                   </p>
-                  
+
                   <div className="flex justify-between md:justify-start md:gap-6 text-xs text-gray-500 border-t border-gray-100 pt-2 md:pt-4 font-medium">
                     <span className="flex items-center gap-1"><Bed size={14} className="md:w-5 md:h-5" /> {prop.habitaciones} <span className="hidden md:inline">Hab</span></span>
                     <span className="flex items-center gap-1 md:border-l md:border-gray-200 md:pl-6"><Bath size={14} className="md:w-5 md:h-5" /> {prop.banos} <span className="hidden md:inline">Baños</span></span>
@@ -886,7 +999,7 @@ const Experience = () => {
             <p className="text-gray-400 mb-8 leading-relaxed text-sm md:text-lg font-light">
               Conocimiento profundo del mercado de Cancún y Riviera Maya. Identifico oportunidades que otros pasan por alto.
             </p>
-            
+
             <div className="grid grid-cols-2 gap-4 md:gap-12 mb-8 md:mb-12 border-t border-gray-800 pt-6 md:pt-10">
               <div>
                 <span className="text-3xl md:text-5xl font-bold text-white block mb-2">+150M</span>
@@ -906,10 +1019,10 @@ const Experience = () => {
         </RevealOnScroll>
 
         <RevealOnScroll delay={300}>
-           <div className="relative h-[300px] md:h-[600px] w-full rounded-lg overflow-hidden shadow-2xl">
-             <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover" alt="Sold Property" />
-             <div className="absolute inset-0 bg-black/20"></div>
-             <div className="absolute bottom-4 left-4 bg-amber-500 text-white text-xs font-bold px-3 py-1 uppercase">Propiedad Vendida</div>
+          <div className="relative h-[300px] md:h-[600px] w-full rounded-lg overflow-hidden shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover" alt="Sold Property" />
+            <div className="absolute inset-0 bg-black/20"></div>
+            <div className="absolute bottom-4 left-4 bg-amber-500 text-white text-xs font-bold px-3 py-1 uppercase">Propiedad Vendida</div>
           </div>
         </RevealOnScroll>
       </div>
@@ -927,7 +1040,7 @@ const Testimonials = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Confianza total</h2>
           </div>
         </RevealOnScroll>
-        
+
         <div className="flex flex-col md:flex-row gap-6 md:gap-8 overflow-x-auto md:overflow-visible pb-4 md:pb-0 snap-x snap-mandatory px-4 md:px-0 -mx-4 md:mx-0 scrollbar-hide">
           {TESTIMONIOS.map((testimonio, idx) => (
             <div key={idx} className="min-w-[85vw] md:min-w-0 md:w-1/3 snap-center">
@@ -973,30 +1086,29 @@ const Areas = () => {
             Especialista en las áreas de mayor plusvalía de Cancún.
           </p>
         </RevealOnScroll>
-        
+
         <RevealOnScroll delay={200}>
           <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-10 md:mb-16">
             {ZONAS.map((zona, idx) => (
-              <button 
+              <button
                 key={idx}
                 onClick={() => handleZonaClick(zona)}
-                className={`px-4 py-2 md:px-8 md:py-3 transition-all shadow-sm rounded-sm text-xs md:text-sm font-bold tracking-wide uppercase ${
-                  selectedZona?.nombre === zona
-                    ? 'bg-amber-500 text-white border border-amber-500'
-                    : 'bg-white border border-gray-200 text-gray-600 hover:border-amber-500 hover:text-amber-500'
-                }`}
+                className={`px-4 py-2 md:px-8 md:py-3 transition-all shadow-sm rounded-sm text-xs md:text-sm font-bold tracking-wide uppercase ${selectedZona?.nombre === zona
+                  ? 'bg-amber-500 text-white border border-amber-500'
+                  : 'bg-white border border-gray-200 text-gray-600 hover:border-amber-500 hover:text-amber-500'
+                  }`}
               >
                 {zona}
               </button>
             ))}
           </div>
         </RevealOnScroll>
-        
+
         <RevealOnScroll delay={400}>
           <div className="mt-8 md:mt-12 w-full h-[250px] md:h-[500px] bg-gray-900 rounded-xl overflow-hidden relative group shadow-lg">
-            <MapContainer 
-              center={[selectedZona?.lat || 21.0631, selectedZona?.lng || -87.0694]} 
-              zoom={12} 
+            <MapContainer
+              center={[selectedZona?.lat || 21.0631, selectedZona?.lng || -87.0694]}
+              zoom={12}
               style={{ height: '100%', width: '100%' }}
               className="rounded-xl"
               key={`${selectedZona?.lat}-${selectedZona?.lng}`}
@@ -1006,8 +1118,8 @@ const Areas = () => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               />
               {ZONAS_MAPA.map((zona, idx) => (
-                <Marker 
-                  key={idx} 
+                <Marker
+                  key={idx}
                   position={[zona.lat, zona.lng]}
                   eventHandlers={{
                     click: () => setSelectedZona(zona),
@@ -1022,7 +1134,7 @@ const Areas = () => {
                 </Marker>
               ))}
             </MapContainer>
-            
+
             {selectedZona && (
               <div className="absolute bottom-4 left-4 right-4 bg-white text-gray-900 p-4 rounded-lg shadow-lg max-w-xs">
                 <h4 className="font-bold mb-1">{selectedZona.nombre}</h4>
@@ -1042,24 +1154,24 @@ const About = () => {
       <div className="container mx-auto px-4 md:px-6 grid md:grid-cols-12 gap-8 md:gap-16 items-center">
         <div className="md:col-span-6 relative">
           <RevealOnScroll delay={200}>
-            <img 
-              src="https://images.unsplash.com/photo-1628146933757-b088194db34d?auto=format&fit=crop&q=80&w=1000" 
-              alt="Lifestyle" 
+            <img
+              src="https://images.unsplash.com/photo-1628146933757-b088194db34d?auto=format&fit=crop&q=80&w=1000"
+              alt="Lifestyle"
               className="w-full h-[300px] md:h-[600px] object-cover rounded-sm shadow-xl"
             />
           </RevealOnScroll>
         </div>
         <div className="md:col-span-6 text-center md:text-left">
-           <RevealOnScroll>
-             <h4 className="text-amber-500 font-bold tracking-widest text-xs md:text-sm mb-4">FILOSOFÍA</h4>
-             <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">Construyo patrimonio.</h2>
-             <p className="text-base md:text-xl text-gray-600 mb-6 leading-relaxed font-light">
-               Honestidad radical: mi prioridad es proteger tu inversión. Si una propiedad no cumple mis estándares, te lo diré.
-             </p>
-             <div className="border-l-4 md:border-l-8 border-amber-500 pl-4 md:pl-8 py-2 md:py-4 italic text-gray-800 text-lg md:text-2xl font-serif bg-gray-50 rounded-r-lg">
-               "El verdadero lujo es la inteligencia de la inversión."
-             </div>
-           </RevealOnScroll>
+          <RevealOnScroll>
+            <h4 className="text-amber-500 font-bold tracking-widest text-xs md:text-sm mb-4">FILOSOFÍA</h4>
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">Construyo patrimonio.</h2>
+            <p className="text-base md:text-xl text-gray-600 mb-6 leading-relaxed font-light">
+              Honestidad radical: mi prioridad es proteger tu inversión. Si una propiedad no cumple mis estándares, te lo diré.
+            </p>
+            <div className="border-l-4 md:border-l-8 border-amber-500 pl-4 md:pl-8 py-2 md:py-4 italic text-gray-800 text-lg md:text-2xl font-serif bg-gray-50 rounded-r-lg">
+              "El verdadero lujo es la inteligencia de la inversión."
+            </div>
+          </RevealOnScroll>
         </div>
       </div>
     </section>
@@ -1080,15 +1192,14 @@ const Destination = () => {
     <section className="relative h-[400px] md:h-[600px] w-full overflow-hidden flex items-center justify-center bg-gray-900">
       <div className="absolute inset-0 z-0">
         {DESTINATION_IMAGES.map((img, index) => (
-          <div 
+          <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-2000 ease-in-out ${
-              index === currentBgIndex ? 'opacity-100' : 'opacity-0'
-            }`}
+            className={`absolute inset-0 transition-opacity duration-2000 ease-in-out ${index === currentBgIndex ? 'opacity-100' : 'opacity-0'
+              }`}
           >
-            <img 
-              src={img} 
-              alt={`Cancun Destination ${index + 1}`} 
+            <img
+              src={img}
+              alt={`Cancun Destination ${index + 1}`}
               className="w-full h-full object-cover transition-transform duration-[20s] ease-linear scale-105 hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-900/40 to-gray-950/60"></div>
@@ -1102,13 +1213,13 @@ const Destination = () => {
             El Paraíso es <span className="font-bold text-amber-500">Rentable</span>
           </h2>
         </RevealOnScroll>
-        
+
         <RevealOnScroll delay={300}>
           <p className="text-lg md:text-2xl text-gray-200 max-w-2xl mx-auto font-light leading-relaxed drop-shadow-md">
             Plusvalía garantizada en el destino turístico #1 de Latinoamérica.
           </p>
         </RevealOnScroll>
-        
+
         <RevealOnScroll delay={600}>
           <button className="bg-white/95 backdrop-blur-sm text-gray-900 px-10 py-4 rounded-sm font-bold uppercase tracking-[0.2em] hover:bg-amber-500 hover:text-white transition-all duration-500 shadow-2xl hover:shadow-amber-500/50 hover:-translate-y-1 mt-4 border border-white/50">
             Descubre la Zona Hotelera
@@ -1124,12 +1235,12 @@ const Contact = () => {
     <section id="contacto" className="py-16 md:py-32 bg-gray-950 text-white relative">
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-10 md:gap-20 items-start">
-          
+
           <RevealOnScroll>
             <div className="text-center lg:text-left mb-10 lg:mb-0">
               <h2 className="text-3xl md:text-5xl font-light mb-4 md:mb-6 leading-tight">Hablemos de tu <span className="text-amber-500 font-bold">inversión</span>.</h2>
               <p className="text-gray-400 mb-8 font-light text-sm md:text-xl">Perspectiva experta y sin compromisos.</p>
-              
+
               <div className="space-y-6 md:space-y-8 mb-8 md:mb-12 inline-block text-left">
                 <a href="mailto:info@luxrealty.mx" className="flex items-center gap-4 md:gap-6 text-base md:text-xl hover:text-amber-500 transition-colors">
                   <Mail size={20} className="text-amber-500" /> <span>info@luxrealty.mx</span>
@@ -1193,11 +1304,11 @@ const Footer = () => {
             </div>
             <p className="text-gray-500 text-xs md:text-sm">Real Estate Premium Cancún.</p>
           </div>
-          
+
           <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-8 text-xs md:text-sm font-medium text-gray-400">
-             <a href="#propiedades" className="hover:text-amber-500">Propiedades</a>
-             <a href="#servicios" className="hover:text-amber-500">Servicios</a>
-             <a href="#contacto" className="hover:text-amber-500">Contacto</a>
+            <a href="#propiedades" className="hover:text-amber-500">Propiedades</a>
+            <a href="#servicios" className="hover:text-amber-500">Servicios</a>
+            <a href="#contacto" className="hover:text-amber-500">Contacto</a>
           </div>
 
           <div className="md:text-right text-gray-500 text-xs md:text-sm">
@@ -1210,12 +1321,12 @@ const Footer = () => {
 };
 
 const WhatsAppButton = () => {
-    useSEO();
-  
+  useSEO();
+
   return (
-    <a 
-      href="https://wa.me/529980000000" 
-      target="_blank" 
+    <a
+      href="https://wa.me/529980000000"
+      target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 bg-[#25D366] text-white p-3 md:p-4 rounded-full shadow-2xl hover:bg-[#20ba5a] transition-all hover:scale-110 flex items-center justify-center group"
     >
@@ -1227,12 +1338,14 @@ const WhatsAppButton = () => {
 /* --- APP PRINCIPAL --- */
 
 function App() {
+  const [showFeed, setShowFeed] = useState(false);
+
   return (
     <div className="font-sans text-gray-900 bg-white antialiased selection:bg-amber-500/30 selection:text-amber-900">
-      <Navbar />
+      <Navbar onOpenFeed={() => setShowFeed(true)} />
       <Hero />
       <div id="asesor">
-        <AdvisorSection />
+        <AdvisorSection onOpenFeed={() => setShowFeed(true)} />
       </div>
       <Properties />
       <Services />
@@ -1244,6 +1357,7 @@ function App() {
       <Contact />
       <Footer />
       <WhatsAppButton />
+      <FeedModal isOpen={showFeed} onClose={() => setShowFeed(false)} />
     </div>
   );
 }
