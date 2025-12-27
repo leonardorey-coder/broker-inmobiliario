@@ -25,3 +25,4 @@ dist-ssr
 
 # documentos de universdad
 /docs
+.vercel
