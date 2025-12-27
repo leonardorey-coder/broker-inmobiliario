@@ -73,49 +73,49 @@ const Contact = () => {
                             <h3 className="text-2xl md:text-3xl font-serif text-gray-900 mb-10 relative z-10">Mensaje directo</h3>
 
                             <form className="grid md:grid-cols-2 gap-x-8 gap-y-10 relative z-10">
-                                <div className="md:col-span-2 group">
+                                <div className="md:col-span-2 relative">
                                     <input
                                         type="text"
-                                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none transition-all placeholder:text-transparent peer text-gray-900 text-lg"
-                                        placeholder="NOMBRE"
+                                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none transition-all peer text-gray-900 text-lg"
+                                        placeholder="&nbsp;"
                                         id="nombre"
                                     />
-                                    <label htmlFor="nombre" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-amber-600 peer-not-placeholder-shown:text-[10px]">
+                                    <label htmlFor="nombre" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-none peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-amber-600 peer-[:not(:placeholder-shown)]:text-[10px]">
                                         Nombre Completo
                                     </label>
                                 </div>
 
-                                <div className="group relative">
+                                <div className="relative">
                                     <input
                                         type="email"
-                                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none transition-all placeholder:text-transparent peer text-gray-900 text-lg"
-                                        placeholder="CORREO"
+                                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none transition-all peer text-gray-900 text-lg"
+                                        placeholder="&nbsp;"
                                         id="correo"
                                     />
-                                    <label htmlFor="correo" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-amber-600 peer-not-placeholder-shown:text-[10px]">
+                                    <label htmlFor="correo" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-none peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-amber-600 peer-[:not(:placeholder-shown)]:text-[10px]">
                                         Correo
                                     </label>
                                 </div>
 
-                                <div className="group relative">
+                                <div className="relative">
                                     <input
                                         type="tel"
-                                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none transition-all placeholder:text-transparent peer text-gray-900 text-lg"
-                                        placeholder="WHATSAPP"
+                                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none transition-all peer text-gray-900 text-lg"
+                                        placeholder="&nbsp;"
                                         id="whatsapp"
                                     />
-                                    <label htmlFor="whatsapp" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-amber-600 peer-not-placeholder-shown:text-[10px]">
+                                    <label htmlFor="whatsapp" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-none peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-amber-600 peer-[:not(:placeholder-shown)]:text-[10px]">
                                         WhatsApp
                                     </label>
                                 </div>
 
-                                <div className="md:col-span-2 group relative">
+                                <div className="md:col-span-2 relative">
                                     <textarea
-                                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none h-32 resize-none transition-all placeholder:text-transparent peer text-gray-900 text-lg"
-                                        placeholder="MENSAJE..."
+                                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none h-32 resize-none transition-all peer text-gray-900 text-lg"
+                                        placeholder="&nbsp;"
                                         id="mensaje"
                                     ></textarea>
-                                    <label htmlFor="mensaje" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-amber-600 peer-not-placeholder-shown:text-[10px]">
+                                    <label htmlFor="mensaje" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-none peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-amber-600 peer-[:not(:placeholder-shown)]:text-[10px]">
                                         Mensaje
                                     </label>
                                 </div>

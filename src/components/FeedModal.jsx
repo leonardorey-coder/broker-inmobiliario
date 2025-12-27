@@ -5,8 +5,15 @@ import { X, Heart, MessageCircle, Bookmark } from 'lucide-react';
 const FeedModal = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 
+    const handleBackdropClick = (e) => {
+        if (e.target === e.currentTarget) {
+            onClose();
+        }
+    };
+
     return (
         <div
+            onClick={handleBackdropClick}
             className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex justify-center items-start overflow-y-auto animate-fade-in">
 
             <button onClick={onClose}
