@@ -86,8 +86,8 @@ const AdvisorSection = ({ onOpenFeed }) => {
                                 }}>
                                     <div className="absolute inset-0 rounded-lg overflow-hidden shadow-[0_30px_70px_-20px_rgba(0,0,0,0.6)] border border-white/10"
                                         style={{ backfaceVisibility: 'hidden' }}>
-                                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800"
-                                            alt="Asesor Inmobiliario" className="w-full h-full object-cover" />
+                                        <img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&q=80&w=800"
+                                            alt="Asesora Inmobiliaria" className="w-full h-full object-cover" />
                                         <div
                                             className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent">
                                         </div>
