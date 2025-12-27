@@ -8,7 +8,7 @@ const About = () => {
                 <div className="md:col-span-6 relative">
                     <RevealOnScroll delay={200}>
                         <img
-                            src="https://images.unsplash.com/photo-1628146933757-b088194db34d?auto=format&fit=crop&q=80&w=1000"
+                            src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1000"
                             alt="Lifestyle"
                             className="w-full h-[300px] md:h-[600px] object-cover rounded-sm shadow-xl"
                         />

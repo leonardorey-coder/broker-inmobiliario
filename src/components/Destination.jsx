@@ -19,7 +19,7 @@ const Destination = () => {
                 {DESTINATION_IMAGES.map((img, index) => (
                     <div
                         key={index}
-                        className={`absolute inset-0 transition-opacity duration-2000 ease-in-out ${index === currentBgIndex ? 'opacity-100' : 'opacity-0'
+                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentBgIndex ? 'opacity-100' : 'opacity-0'
                             }`}
                     >
                         <img

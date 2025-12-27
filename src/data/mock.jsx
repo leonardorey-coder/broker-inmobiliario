@@ -9,9 +9,9 @@ export const HERO_IMAGES = [
 
 export const DESTINATION_IMAGES = [
     "https://images.unsplash.com/photo-1544161513-0179fe746fd5?auto=format&fit=crop&q=80&w=2000",
-    "https://i.imgur.com/8Y7F5yQ.jpg",
-    "https://i.imgur.com/0Q0Q4yQ.jpg",
-    "https://i.imgur.com/3Y6Y6yQ.jpg"
+    "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?auto=format&fit=crop&q=80&w=2000",
+    "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=2000",
+    "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&q=80&w=2000"
 ];
 
 export const PROPIEDADES = [
@@ -38,7 +38,7 @@ export const PROPIEDADES = [
         banos: 5,
         area: "450 m²",
         estado: "Disponible",
-        imagen: "https://images.unsplash.com/photo-1600596542815-2495db9dc2c3?auto=format&fit=crop&q=80&w=1000",
+        imagen: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=1000",
         descripcion: "Casa familiar en condominio exclusivo con seguridad 24/7 y áreas verdes."
     },
     {
@@ -77,7 +77,7 @@ export const PROPIEDADES = [
         banos: 6,
         area: "600 m²",
         estado: "Disponible",
-        imagen: "https://images.unsplash.com/photo-1613490493576-2f045a403442?auto=format&fit=crop&q=80&w=1000",
+        imagen: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1000",
         descripcion: "Muelle privado, alberca infinita y las mejores vistas del atardecer."
     },
     {
