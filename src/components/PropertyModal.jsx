@@ -1,3 +1,5 @@
+import { X, MapPin, Bed, Bath, Move, MessageCircle } from 'lucide-react';
+
 const PropertyModal = ({ property, onClose }) => {
     if (!property) return null;
 
