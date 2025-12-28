@@ -3,7 +3,7 @@ import RevealOnScroll from "../utils/RevealOnScroll";
 
 const About = () => {
     return (
-        <section className="py-16 md:py-24 bg-white">
+        <section className="sticky top-0 z-0 h-[160vh] py-16 md:py-24 bg-white">
             <div className="container mx-auto px-4 md:px-6 grid md:grid-cols-12 gap-8 md:gap-16 items-center">
                 <div className="md:col-span-6 relative">
                     <RevealOnScroll delay={200}>

@@ -14,7 +14,6 @@ import FeedModal from './components/FeedModal';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import AdvisorSection from './components/AdvisorSection.jsx';
-import PropertyModal from './components/PropertyModal';
 import Properties from './components/Properties.jsx';
 import Services from './components/Services.jsx';
 import Experience from './components/Experience.jsx';

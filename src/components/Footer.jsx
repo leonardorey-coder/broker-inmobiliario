@@ -1,10 +1,7 @@
 
-import { Mail, Phone, MapPin, Instagram, Facebook, Linkedin } from "lucide-react";
-import RevealOnScroll from "../utils/RevealOnScroll";
-
 const Footer = () => {
     return (
-        <footer className="bg-black text-white py-8 md:py-12 border-t border-gray-900 text-center md:text-left">
+        <footer className="sticky top-0 z-1 bg-black text-white py-8 md:py-12 border-t border-gray-900 text-center md:text-left">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="grid md:grid-cols-3 gap-8 md:gap-12 mb-8 md:mb-12 items-center">
                     <div>
