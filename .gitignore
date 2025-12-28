@@ -26,3 +26,12 @@ dist-ssr
 # documentos de universdad
 /docs
 .vercel
+.cursor
+.env
+.env.local
+.env.*.local
+.next
+out
+.build
+.vscode
+.cursorrules
