@@ -15,6 +15,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import AdvisorSection from './components/AdvisorSection.jsx';
 import Properties from './components/Properties.jsx';
+import PropertySlider from './components/PropertySlider.jsx';
 import Services from './components/Services.jsx';
 import Experience from './components/Experience.jsx';
 import Testimonials from './components/Testimonials.jsx';
@@ -37,6 +38,7 @@ function App() {
       <div id="asesor">
         <AdvisorSection onOpenFeed={() => setShowFeed(true)} />
       </div>
+      <PropertySlider />
       <Properties />
       <Services />
       <Experience />
