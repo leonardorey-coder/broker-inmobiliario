@@ -4,7 +4,7 @@ import { PROPIEDADES } from "../data/mock";
 import RevealOnScroll from '../utils/RevealOnScroll';
 import PropertyModal from './PropertyModal';
 
-const Properties = () => {
+const Properties = ({ onContactWithProperty }) => {
     const [filter, setFilter] = useState('todos');
     const [selectedProp, setSelectedProp] = useState(null);
 
@@ -84,7 +84,11 @@ const Properties = () => {
                 </div>
             </div>
 
-            <PropertyModal property={selectedProp} onClose={() => setSelectedProp(null)} />
+            <PropertyModal
+                property={selectedProp}
+                onClose={() => setSelectedProp(null)}
+                onContact={onContactWithProperty}
+            />
         </section>
     );
 };

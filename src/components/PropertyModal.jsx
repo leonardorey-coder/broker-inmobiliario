@@ -1,6 +1,6 @@
 import { X, MapPin, Bed, Bath, Move, MessageCircle } from 'lucide-react';
 
-const PropertyModal = ({ property, onClose }) => {
+const PropertyModal = ({ property, onClose, onContact }) => {
     if (!property) return null;
 
     const handleBackdropClick = (e) => {
@@ -60,7 +60,15 @@ const PropertyModal = ({ property, onClose }) => {
                         <button className="w-full bg-gray-900 text-white py-4 font-bold tracking-widest hover:bg-amber-600 transition-colors flex items-center justify-center gap-2 uppercase text-xs md:text-sm rounded-sm">
                             <MessageCircle size={18} /> Info por WhatsApp
                         </button>
-                        <button className="w-full border-2 border-gray-900 text-gray-900 py-4 font-bold tracking-widest hover:bg-gray-900 hover:text-white transition-colors uppercase text-xs md:text-sm rounded-sm">
+                        <button
+                            className="w-full border-2 border-gray-900 text-gray-900 py-4 font-bold tracking-widest hover:bg-gray-900 hover:text-white transition-colors uppercase text-xs md:text-sm rounded-sm"
+                            onClick={() => {
+                                if (onContact) {
+                                    onContact(property);
+                                }
+                                onClose();
+                            }}
+                        >
                             Agendar Visita
                         </button>
                     </div>

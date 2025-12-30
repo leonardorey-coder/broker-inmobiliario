@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, MapPin, Bed, Bath, Move } from 'lucide-react
 import { PROPIEDADES } from '../data/mock';
 import PropertyModal from './PropertyModal';
 
-const PropertySlider = ({ autoPlay = true, interval = 5000 }) => {
+const PropertySlider = ({ autoPlay = true, interval = 5000, onContactWithProperty }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedProp, setSelectedProp] = useState(null);
     const [isAnimating, setIsAnimating] = useState(false);
@@ -179,7 +179,11 @@ const PropertySlider = ({ autoPlay = true, interval = 5000 }) => {
                 </div>
             </div>
 
-            <PropertyModal property={selectedProp} onClose={() => setSelectedProp(null)} />
+            <PropertyModal
+                property={selectedProp}
+                onClose={() => setSelectedProp(null)}
+                onContact={onContactWithProperty}
+            />
         </section>
     );
 };
