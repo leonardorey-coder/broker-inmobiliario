@@ -95,10 +95,55 @@ export const PROPIEDADES = [
     }
 ];
 
+export const CASOS_EXITO = [
+    {
+        id: 1,
+        propiedadId: 1,
+        tipo: "Departamento",
+        ubicacion: "Puerto Cancún",
+        titulo: "Venta en 21 dias por arriba del precio objetivo",
+        contexto: "Propiedad con 6 meses en el mercado sin ofertas serias.",
+        resultados: [
+            { etiqueta: "Tiempo de cierre", valor: "21 dias" },
+            { etiqueta: "Precio", valor: "+8% vs. objetivo" },
+            { etiqueta: "Visitas", valor: "12 en 7 dias" }
+        ],
+        imagen: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1400"
+    },
+    {
+        id: 2,
+        propiedadId: 2,
+        tipo: "Residencia",
+        ubicacion: "Zona Hotelera",
+        titulo: "Cierre express con comprador internacional",
+        contexto: "Se requerian condiciones flexibles y asesoramiento legal bilingue.",
+        resultados: [
+            { etiqueta: "Tiempo de cierre", valor: "28 dias" },
+            { etiqueta: "Oferta", valor: "Pago de contado" },
+            { etiqueta: "Negociacion", valor: "+5% sobre lista" }
+        ],
+        imagen: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=1400"
+    },
+    {
+        id: 3,
+        propiedadId: 5,
+        tipo: "Villa",
+        ubicacion: "Lagos del Sol",
+        titulo: "Reposicionamiento de marca y venta premium",
+        contexto: "Se redisenaron materiales, staging y estrategia de precio.",
+        resultados: [
+            { etiqueta: "Tiempo de cierre", valor: "34 dias" },
+            { etiqueta: "Interes", valor: "18 prospectos calificados" },
+            { etiqueta: "Resultado", valor: "Venta con muebles" }
+        ],
+        imagen: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1400"
+    }
+];
+
 export const TESTIMONIOS = [
     {
-        nombre: "Carlos Méndez",
-        comentario: "Encontró exactamente lo que buscaba en Puerto Cancún en tiempo récord.",
+        nombre: "Carlos Mendez",
+        comentario: "Encontro exactamente lo que buscaba en Puerto Cancun en tiempo record.",
         estrellas: 5,
         rol: "Inversionista"
     },
@@ -110,7 +155,7 @@ export const TESTIMONIOS = [
     },
     {
         nombre: "Familia Torres",
-        comentario: "Vendimos nuestra casa al precio justo gracias a su valoración experta.",
+        comentario: "Vendimos nuestra casa al precio justo gracias a su valoracion experta.",
         estrellas: 5,
         rol: "Vendedores"
     }

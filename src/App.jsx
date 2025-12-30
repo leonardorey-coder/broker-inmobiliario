@@ -19,6 +19,7 @@ import PropertySlider from './components/PropertySlider.jsx';
 import Services from './components/Services.jsx';
 import Experience from './components/Experience.jsx';
 import Testimonials from './components/Testimonials.jsx';
+import SuccessCases from './components/SuccessCases.jsx';
 import Areas from './components/Areas.jsx';
 import About from './components/About.jsx';
 import Destination from './components/Destination.jsx';
@@ -30,6 +31,27 @@ import WhatsAppButton from './components/WhatsAppButton.jsx';
 
 function App() {
   const [showFeed, setShowFeed] = useState(false);
+  const [contactPrefillMessage, setContactPrefillMessage] = useState("");
+
+  const handleOpenContact = (message = "") => {
+    setContactPrefillMessage(message);
+    const contactSection = document.getElementById("contacto");
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleContactFromProperty = (property) => {
+    if (!property) return;
+    const message = `Hola, me interesa la propiedad ${property.titulo} en ${property.ubicacion} (${property.area}, ${property.habitaciones} hab, ${property.banos} banos) con precio ${property.precio}. Podemos agendar una visita?`;
+    handleOpenContact(message);
+  };
+
+  const handleContactFromSuccessCase = (caseItem) => {
+    if (!caseItem) return;
+    const message = `Hola, me interesa un resultado similar al caso "${caseItem.titulo}" en ${caseItem.ubicacion}. Busco asesoria para ${caseItem.tipo.toLowerCase()} y quisiera conocer su estrategia.`;
+    handleOpenContact(message);
+  };
 
   return (
     <div className="font-sans text-gray-900 bg-white antialiased selection:bg-amber-500/30 selection:text-amber-900">
@@ -38,15 +60,19 @@ function App() {
       <div id="asesor">
         <AdvisorSection onOpenFeed={() => setShowFeed(true)} />
       </div>
-      <PropertySlider />
-      <Properties />
+      <PropertySlider onContactWithProperty={handleContactFromProperty} />
+      <Properties onContactWithProperty={handleContactFromProperty} />
       <Services />
       <Experience />
       <Testimonials />
+      <SuccessCases
+        onContactWithCase={handleContactFromSuccessCase}
+        onContactWithProperty={handleContactFromProperty}
+      />
       <Areas />
       <About />
       <Destination />
-      <Contact />
+      <Contact prefillMessage={contactPrefillMessage} />
       <Footer />
       <WhatsAppButton />
       <FeedModal isOpen={showFeed} onClose={() => setShowFeed(false)} />

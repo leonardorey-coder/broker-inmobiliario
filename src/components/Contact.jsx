@@ -1,7 +1,8 @@
-import { Mail, Phone, MapPin, Instagram, Facebook, Linkedin } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Mail, Phone, MapPin, Instagram, Facebook, Linkedin, X } from "lucide-react";
 import RevealOnScroll from "../utils/RevealOnScroll";
 
-const Contact = () => {
+const Contact = ({ prefillMessage = "" }) => {
     return (
         <section id="contacto" className="py-20 md:py-32 bg-gray-950 text-white relative overflow-hidden">
             {/* Decorative Background Elements */}
@@ -67,70 +68,131 @@ const Contact = () => {
 
                     {/* Right Column: Premium Form */}
                     <RevealOnScroll delay={300} className="lg:col-span-7 w-full">
-                        <div className="bg-white text-gray-900 p-8 md:p-12 lg:p-16 rounded-3xl shadow-2xl relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-[100px] -mr-8 -mt-8 z-0"></div>
-
-                            <h3 className="text-2xl md:text-3xl font-serif text-gray-900 mb-10 relative z-10">Mensaje directo</h3>
-
-                            <form className="grid md:grid-cols-2 gap-x-8 gap-y-10 relative z-10">
-                                <div className="md:col-span-2 relative">
-                                    <input
-                                        type="text"
-                                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none transition-all peer text-gray-900 text-lg"
-                                        placeholder="&nbsp;"
-                                        id="nombre"
-                                    />
-                                    <label htmlFor="nombre" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-none peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-amber-600 peer-[:not(:placeholder-shown)]:text-[10px]">
-                                        Nombre Completo
-                                    </label>
-                                </div>
-
-                                <div className="relative">
-                                    <input
-                                        type="email"
-                                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none transition-all peer text-gray-900 text-lg"
-                                        placeholder="&nbsp;"
-                                        id="correo"
-                                    />
-                                    <label htmlFor="correo" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-none peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-amber-600 peer-[:not(:placeholder-shown)]:text-[10px]">
-                                        Correo
-                                    </label>
-                                </div>
-
-                                <div className="relative">
-                                    <input
-                                        type="tel"
-                                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none transition-all peer text-gray-900 text-lg"
-                                        placeholder="&nbsp;"
-                                        id="whatsapp"
-                                    />
-                                    <label htmlFor="whatsapp" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-none peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-amber-600 peer-[:not(:placeholder-shown)]:text-[10px]">
-                                        WhatsApp
-                                    </label>
-                                </div>
-
-                                <div className="md:col-span-2 relative">
-                                    <textarea
-                                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none h-32 resize-none transition-all peer text-gray-900 text-lg"
-                                        placeholder="&nbsp;"
-                                        id="mensaje"
-                                    ></textarea>
-                                    <label htmlFor="mensaje" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-none peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-amber-600 peer-[:not(:placeholder-shown)]:text-[10px]">
-                                        Mensaje
-                                    </label>
-                                </div>
-
-                                <div className="md:col-span-2 pt-6">
-                                    <button type="button" className="w-full bg-gray-900 text-white py-5 font-bold tracking-[0.3em] hover:bg-amber-600 transition-all duration-500 uppercase text-xs md:text-sm rounded-sm shadow-xl hover:shadow-2xl hover:-translate-y-1">
-                                        Enviar Mensaje
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                        <ContactForm prefillMessage={prefillMessage} />
                     </RevealOnScroll>
                 </div>
             </div>
         </section>
+    );
+};
+
+const ContactForm = ({ prefillMessage }) => {
+    const [message, setMessage] = useState("");
+    const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+
+    useEffect(() => {
+        if (prefillMessage) {
+            setMessage(prefillMessage);
+        }
+    }, [prefillMessage]);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setIsConfirmationOpen(true);
+    };
+
+    const handleBackdropClick = (event) => {
+        if (event.target === event.currentTarget) {
+            setIsConfirmationOpen(false);
+        }
+    };
+
+    return (
+        <div className="bg-white text-gray-900 p-8 md:p-12 lg:p-16 rounded-3xl shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-[100px] -mr-8 -mt-8 z-0"></div>
+
+            <h3 className="text-2xl md:text-3xl font-serif text-gray-900 mb-10 relative z-10">Mensaje directo</h3>
+
+            <form className="grid md:grid-cols-2 gap-x-8 gap-y-10 relative z-10" onSubmit={handleSubmit}>
+                <div className="md:col-span-2 relative">
+                    <input
+                        type="text"
+                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none transition-all peer text-gray-900 text-lg"
+                        placeholder="&nbsp;"
+                        id="nombre"
+                    />
+                    <label htmlFor="nombre" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-none peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-amber-600 peer-[:not(:placeholder-shown)]:text-[10px]">
+                        Nombre Completo
+                    </label>
+                </div>
+
+                <div className="relative">
+                    <input
+                        type="email"
+                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none transition-all peer text-gray-900 text-lg"
+                        placeholder="&nbsp;"
+                        id="correo"
+                    />
+                    <label htmlFor="correo" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-none peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-amber-600 peer-[:not(:placeholder-shown)]:text-[10px]">
+                        Correo
+                    </label>
+                </div>
+
+                <div className="relative">
+                    <input
+                        type="tel"
+                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none transition-all peer text-gray-900 text-lg"
+                        placeholder="&nbsp;"
+                        id="whatsapp"
+                    />
+                    <label htmlFor="whatsapp" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-none peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-amber-600 peer-[:not(:placeholder-shown)]:text-[10px]">
+                        WhatsApp
+                    </label>
+                </div>
+
+                <div className="md:col-span-2 relative">
+                    <textarea
+                        className="w-full bg-transparent border-b border-gray-300 py-4 focus:border-gray-900 focus:outline-none h-32 resize-none transition-all peer text-gray-900 text-lg"
+                        placeholder="&nbsp;"
+                        id="mensaje"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                    ></textarea>
+                    <label htmlFor="mensaje" className="absolute left-0 top-4 text-gray-400 text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-none peer-focus:-top-4 peer-focus:text-amber-600 peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-amber-600 peer-[:not(:placeholder-shown)]:text-[10px]">
+                        Mensaje
+                    </label>
+                </div>
+
+                <div className="md:col-span-2 pt-6">
+                    <button type="submit" className="w-full bg-gray-900 text-white py-5 font-bold tracking-[0.3em] hover:bg-amber-600 transition-all duration-500 uppercase text-xs md:text-sm rounded-sm shadow-xl hover:shadow-2xl hover:-translate-y-1">
+                        Enviar Mensaje
+                    </button>
+                </div>
+            </form>
+
+            {isConfirmationOpen && (
+                <div
+                    onClick={handleBackdropClick}
+                    className="fixed inset-0 z-[70] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6">
+                    <div
+                        role="dialog"
+                        aria-modal="true"
+                        className="bg-white text-gray-900 rounded-2xl shadow-2xl max-w-md w-full p-8 md:p-10 relative animate-fade-in">
+                        <button
+                            type="button"
+                            onClick={() => setIsConfirmationOpen(false)}
+                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors">
+                            <X size={22} />
+                        </button>
+                        <span className="text-amber-600 font-bold tracking-[0.2em] text-xs uppercase block mb-4">
+                            Confirmacion de envio
+                        </span>
+                        <h4 className="text-2xl md:text-3xl font-serif text-gray-900 mb-3">
+                            Tu mensaje ya va en camino.
+                        </h4>
+                        <p className="text-gray-600 text-base leading-relaxed mb-8">
+                            En breve te contactaremos para ayudarte con tu inversion.
+                        </p>
+                        <button
+                            type="button"
+                            onClick={() => setIsConfirmationOpen(false)}
+                            className="w-full bg-gray-900 text-white py-4 font-bold tracking-[0.3em] uppercase text-xs md:text-sm rounded-sm hover:bg-amber-600 transition-all duration-500">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 };
 
